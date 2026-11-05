@@ -7,7 +7,7 @@ GUI на CustomTkinter. Привязка канал → MAX-чат (с комм�
 
 import asyncio
 import json
-import os
+import os, sys
 import queue
 import threading
 import time
@@ -149,10 +149,23 @@ class RadioMonitor:
         return False
 
 
+def _resource_path(rel: str) -> str:
+    try:
+        base = sys._MEIPASS
+    except AttributeError:
+        base = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(base, rel)
+
 # ============================ GUI ============================
 class MeshMaxApp(ctk.CTk):
     def __init__(self):
         super().__init__()
+        icon = _resource_path("icon.ico")
+        if os.path.exists(icon):
+            try:
+                self.iconbitmap(icon)
+            except Exception:
+                pass
         self.title("MeshCore ⇄ MAX Bridge")
         self.geometry("1000x860")
         self.minsize(920, 720)
